@@ -129,13 +129,21 @@
           targets = [ "wasm32-wasi" ];
         };
 
-        devInputs = [
-          rustToolchainTOML
-          pkgs.binaryen
-          pkgs.mkdocs
-          pkgs.just
-          pkgs.protobuf
-        ];
+        devInputs =
+          [
+            rustToolchainTOML
+            pkgs.binaryen
+            pkgs.mkdocs
+            pkgs.just
+            pkgs.protobuf
+          ]
+          ++ pkgs.lib.optionals pkgs.stdenv.isDarwin (
+            with pkgs.darwin.apple_sdk.frameworks;
+            [
+              DiskArbitration
+              Foundation
+            ]
+          );
 
         fmtInputs = [
           pkgs.nixfmt-rfc-style
